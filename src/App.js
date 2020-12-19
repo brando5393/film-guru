@@ -28,7 +28,7 @@ function App() {
     e.preventDefault();
     if (state.userInput !== "") {
       axios
-        .get(`http://www.omdbapi.com/?apikey=52214b18&t=${state.userInput}`)
+        .get(`https://www.omdbapi.com/?apikey=52214b18&t=${state.userInput}`)
         .then((res) => {
           setState({
             ...state,
