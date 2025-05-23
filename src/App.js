@@ -5,51 +5,49 @@ import "./App.css";
 import Search from "./components/Search/Search";
 import Results from "./components/Results/Results";
 import CoffeeButton from "./components/CoffeeButton/CoffeeButton";
+import MovieContext from "./MovieContext";
 
 // dotenv.config();
 
-function App() {
-  const [state, setState] = useState({
-    dataAvailable: false,
-    showAlert: false,
-    userInput: "",
-    movieData: [],
-  });
+const App = () => {
+  const [dataAvailable, setDataAvailable] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [userInput, setUserInput] = useState("");
+  const [movieData, setMovieData] = useState({});
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    setState({
-      ...state,
-      [e.target.name]: value.toLowerCase(),
-    });
+    setUserInput(e.target.value.toLowerCase());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (state.userInput !== "") {
+    if (userInput !== "") {
       axios
-        .get(`https://www.omdbapi.com/?apikey=52214b18&t=${state.userInput}`)
+        .get(`https://www.omdbapi.com/?apikey=52214b18&t=${userInput}`)
         .then((res) => {
-          setState({
-            ...state,
-            movieData: res.data,
-            dataAvailable: true,
-            showAlert: false,
-          });
+          setMovieData(res.data);
+          setDataAvailable(true);
+          setShowAlert(false);
           console.log(res.data);
         })
         .catch((err) => console.log(err));
     } else {
-      setState({
-        ...state,
-        dataAvailable: false,
-        showAlert: true,
-      });
+      setDataAvailable(false);
+      setShowAlert(true);
     }
   };
 
+  const contextValue = {
+    dataAvailable,
+    showAlert,
+    userInput,
+    movieData,
+    handleChange,
+    handleSubmit,
+  };
+
   return (
-    <div>
+    <MovieContext.Provider value={contextValue}>
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
@@ -59,40 +57,13 @@ function App() {
                 Answering all of your film related questions in a flash.
               </p>
               <hr className="my-4" />
-              <Search
-                value={state.userInput}
-                onChange={handleChange}
-                handleSubmit={handleSubmit}
-                showAlert={state.showAlert}
-              />
+              <Search />
             </div>
           </div>
         </div>
         <div className="row results-area">
           <div className="col-lg-12">
-            {state.dataAvailable ? (
-              <Results
-                awards={state.movieData.Awards}
-                cast={state.movieData.Actors}
-                director={state.movieData.Director}
-                country={state.movieData.Country}
-                dvd={state.movieData.DVD}
-                earnings={state.movieData.BoxOffice}
-                genre={state.movieData.Genre}
-                languages={state.movieData.Language}
-                plot={state.movieData.Plot}
-                poster={state.movieData.Poster}
-                production={state.movieData.Production}
-                rating={state.movieData.Rated}
-                releaseDate={state.movieData.Released}
-                title={state.movieData.Title}
-                website={state.movieData.Website}
-                writer={state.movieData.Writer}
-                year={state.movieData.Year}
-              />
-            ) : (
-              <h3>No data to display... Try searching for something.</h3>
-            )}
+            {dataAvailable ? <Results /> : <h3>No data to display... Try searching for something.</h3>}
           </div>
         </div>
       </div>
@@ -105,8 +76,8 @@ function App() {
           <CoffeeButton />
         </div>
       </div>
-    </div>
+    </MovieContext.Provider>
   );
-}
+};
 
 export default App;

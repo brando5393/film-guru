@@ -1,18 +1,20 @@
 import React from "react";
 import Alert from "../Alert/Alert";
+import { useMovie } from "../../MovieContext";
 
-const Search = (props) => {
+const Search = () => {
+  const { value: userInput, handleSubmit, showAlert, handleChange, userInput: value } = useMovie();
   return (
-    <form className="form" onSubmit={props.handleSubmit}>
-      <Alert showAlert={props.showAlert} />
+    <form className="form" onSubmit={handleSubmit}>
+      <Alert showAlert={showAlert} />
       <div className="form-group">
         <input
           type="text"
           className="form-control"
           placeholder="Enter Movie Title"
-          value={props.value}
+          value={value}
           name="userInput"
-          onChange={props.onChange}
+          onChange={handleChange}
         />
         <button type="submit" className="btn-lg btn-primary">
           Search
