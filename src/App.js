@@ -5,6 +5,7 @@ import "./App.css";
 import Search from "./components/Search/Search";
 import Results from "./components/Results/Results";
 import CoffeeButton from "./components/CoffeeButton/CoffeeButton";
+import MovieContext from "./MovieContext";
 
 // dotenv.config();
 
@@ -36,8 +37,17 @@ const App = () => {
     }
   };
 
+  const contextValue = {
+    dataAvailable,
+    showAlert,
+    userInput,
+    movieData,
+    handleChange,
+    handleSubmit,
+  };
+
   return (
-    <div>
+    <MovieContext.Provider value={contextValue}>
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
@@ -47,40 +57,13 @@ const App = () => {
                 Answering all of your film related questions in a flash.
               </p>
               <hr className="my-4" />
-              <Search
-                value={userInput}
-                onChange={handleChange}
-                handleSubmit={handleSubmit}
-                showAlert={showAlert}
-              />
+              <Search />
             </div>
           </div>
         </div>
         <div className="row results-area">
           <div className="col-lg-12">
-            {dataAvailable ? (
-              <Results
-                awards={movieData.Awards}
-                cast={movieData.Actors}
-                director={movieData.Director}
-                country={movieData.Country}
-                dvd={movieData.DVD}
-                earnings={movieData.BoxOffice}
-                genre={movieData.Genre}
-                languages={movieData.Language}
-                plot={movieData.Plot}
-                poster={movieData.Poster}
-                production={movieData.Production}
-                rating={movieData.Rated}
-                releaseDate={movieData.Released}
-                title={movieData.Title}
-                website={movieData.Website}
-                writer={movieData.Writer}
-                year={movieData.Year}
-              />
-            ) : (
-              <h3>No data to display... Try searching for something.</h3>
-            )}
+            {dataAvailable ? <Results /> : <h3>No data to display... Try searching for something.</h3>}
           </div>
         </div>
       </div>
@@ -93,7 +76,7 @@ const App = () => {
           <CoffeeButton />
         </div>
       </div>
-    </div>
+    </MovieContext.Provider>
   );
 };
 
