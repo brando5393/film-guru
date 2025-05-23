@@ -8,43 +8,31 @@ import CoffeeButton from "./components/CoffeeButton/CoffeeButton";
 
 // dotenv.config();
 
-function App() {
-  const [state, setState] = useState({
-    dataAvailable: false,
-    showAlert: false,
-    userInput: "",
-    movieData: [],
-  });
+const App = () => {
+  const [dataAvailable, setDataAvailable] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [userInput, setUserInput] = useState("");
+  const [movieData, setMovieData] = useState({});
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    setState({
-      ...state,
-      [e.target.name]: value.toLowerCase(),
-    });
+    setUserInput(e.target.value.toLowerCase());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (state.userInput !== "") {
+    if (userInput !== "") {
       axios
-        .get(`https://www.omdbapi.com/?apikey=52214b18&t=${state.userInput}`)
+        .get(`https://www.omdbapi.com/?apikey=52214b18&t=${userInput}`)
         .then((res) => {
-          setState({
-            ...state,
-            movieData: res.data,
-            dataAvailable: true,
-            showAlert: false,
-          });
+          setMovieData(res.data);
+          setDataAvailable(true);
+          setShowAlert(false);
           console.log(res.data);
         })
         .catch((err) => console.log(err));
     } else {
-      setState({
-        ...state,
-        dataAvailable: false,
-        showAlert: true,
-      });
+      setDataAvailable(false);
+      setShowAlert(true);
     }
   };
 
@@ -60,35 +48,35 @@ function App() {
               </p>
               <hr className="my-4" />
               <Search
-                value={state.userInput}
+                value={userInput}
                 onChange={handleChange}
                 handleSubmit={handleSubmit}
-                showAlert={state.showAlert}
+                showAlert={showAlert}
               />
             </div>
           </div>
         </div>
         <div className="row results-area">
           <div className="col-lg-12">
-            {state.dataAvailable ? (
+            {dataAvailable ? (
               <Results
-                awards={state.movieData.Awards}
-                cast={state.movieData.Actors}
-                director={state.movieData.Director}
-                country={state.movieData.Country}
-                dvd={state.movieData.DVD}
-                earnings={state.movieData.BoxOffice}
-                genre={state.movieData.Genre}
-                languages={state.movieData.Language}
-                plot={state.movieData.Plot}
-                poster={state.movieData.Poster}
-                production={state.movieData.Production}
-                rating={state.movieData.Rated}
-                releaseDate={state.movieData.Released}
-                title={state.movieData.Title}
-                website={state.movieData.Website}
-                writer={state.movieData.Writer}
-                year={state.movieData.Year}
+                awards={movieData.Awards}
+                cast={movieData.Actors}
+                director={movieData.Director}
+                country={movieData.Country}
+                dvd={movieData.DVD}
+                earnings={movieData.BoxOffice}
+                genre={movieData.Genre}
+                languages={movieData.Language}
+                plot={movieData.Plot}
+                poster={movieData.Poster}
+                production={movieData.Production}
+                rating={movieData.Rated}
+                releaseDate={movieData.Released}
+                title={movieData.Title}
+                website={movieData.Website}
+                writer={movieData.Writer}
+                year={movieData.Year}
               />
             ) : (
               <h3>No data to display... Try searching for something.</h3>
@@ -107,6 +95,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
