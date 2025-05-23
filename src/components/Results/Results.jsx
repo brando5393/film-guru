@@ -4,54 +4,70 @@ import InfoCard from "../InfoCard/InfoCard";
 import BoxOffice from "../BoxOffice/BoxOffice";
 import CastCrew from "../CastCrew/CastCrew";
 
-const Results = (props) => {
-  return (
-    <div>
-      <div className="row result-title">
-        <div className="col-lg-12">
-          <h2>
-            {props.title}~{props.year}
-          </h2>
-        </div>
+const Results = ({
+  title,
+  year,
+  poster,
+  awards,
+  country,
+  dvd,
+  genre,
+  languages,
+  plot,
+  production,
+  rating,
+  releaseDate,
+  website,
+  cast,
+  director,
+  writer,
+  earnings,
+}) => (
+  <div>
+    <div className="row result-title">
+      <div className="col-lg-12">
+        <h2>
+          {title}~{year}
+        </h2>
       </div>
-      <div className="row">
-        <div className="col-lg-6">
-          <Poster posterImg={props.poster} title={props.title} />
-        </div>
-        <div className="col-lg-6">
-          <div className="row">
-            <div className="col-lg-6">
-              <InfoCard
-                awards={props.awards}
-                country={props.country}
-                dvd={props.dvd}
-                genre={props.genre}
-                languages={props.languages}
-                plot={props.plot}
-                production={props.production}
-                rating={props.rating}
-                releaseDate={props.releaseDate}
-                title={props.title}
-                website={props.website}
-              />
-            </div>
-            <div className="col-lg-6">
-              <CastCrew
-                cast={props.cast}
-                director={props.director}
-                writer={props.writer}
-              />
-            </div>
+    </div>
+    <div className="row">
+      <div className="col-lg-6">
+        <Poster posterImg={poster} title={title} />
+      </div>
+      <div className="col-lg-6">
+        <div className="row">
+          <div className="col-lg-6">
+            <InfoCard
+              awards={awards}
+              country={country}
+              dvd={dvd}
+              genre={genre}
+              languages={languages}
+              plot={plot}
+              production={production}
+              rating={rating}
+              releaseDate={releaseDate}
+              title={title}
+              website={website}
+            />
           </div>
-          <div className="row box-office">
-            <div className="col-lg-12">
-              <BoxOffice earnings={props.earnings} />
-            </div>
+          <div className="col-lg-6">
+            <CastCrew
+              cast={cast}
+              director={director}
+              writer={writer}
+            />
+          </div>
+        </div>
+        <div className="row box-office">
+          <div className="col-lg-12">
+            <BoxOffice earnings={earnings} />
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default Results;
